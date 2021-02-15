@@ -109,6 +109,12 @@ export const ROUTES: RouteInfo[] = [
     ],
   },
   {
+    path: "/admin/collaboration",
+    title: "Collaboration",
+    type: "link",
+    icontype: "fas fa-road text-default",
+  },
+  {
     path: "/admin/report",
     title: "Reporting",
     type: "link",

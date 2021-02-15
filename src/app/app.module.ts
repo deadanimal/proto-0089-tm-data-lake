@@ -18,6 +18,11 @@ import { PresentationModule } from "./examples/presentation/presentation.module"
 import { RouterModule } from "@angular/router";
 import { AppRoutingModule } from "./app-routing.module";
 import { ComponentsModule } from "./components/components.module";
+import { MatStepperModule } from "@angular/material/stepper";
+import { CdkStepperModule } from "@angular/cdk/stepper";
+import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
+
+
 
 @NgModule({
   imports: [
@@ -38,6 +43,9 @@ import { ComponentsModule } from "./components/components.module";
     }),
     LeafletModule,
     PresentationModule,
+    MatStepperModule,
+    CdkStepperModule,
+    //MatFormFieldModule
   ],
   declarations: [AppComponent, AdminLayoutComponent, AuthLayoutComponent],
   providers: [
@@ -46,7 +54,9 @@ import { ComponentsModule } from "./components/components.module";
       provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true
     }
     */
+   { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
   ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
+

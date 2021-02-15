@@ -62,6 +62,7 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatTreeModule } from "@angular/material/tree";
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { QuillModule } from "ngx-quill";
 import { NgxDropzoneModule } from "ngx-dropzone";
@@ -124,6 +125,7 @@ import { ManagementEnvironmentReferenceComponent } from "./management-environmen
 import { ManagementEnvironmentTargetComponent } from "./management-environment-target/management-environment-target.component";
 import { ManagementEnvironmentTlsComponent } from "./management-environment-tls/management-environment-tls.component";
 import { DevelopProxiesCreateReverseComponent } from "./develop-proxies-create-reverse/develop-proxies-create-reverse.component";
+import { DataFlowComponent } from './data-flow/data-flow.component';
 
 @NgModule({
   declarations: [
@@ -187,6 +189,7 @@ import { DevelopProxiesCreateReverseComponent } from "./develop-proxies-create-r
     ManagementEnvironmentTargetComponent,
     ManagementEnvironmentTlsComponent,
     DevelopProxiesCreateReverseComponent,
+    DataFlowComponent,
     //// code syafiq
   ],
   imports: [
@@ -207,6 +210,11 @@ import { DevelopProxiesCreateReverseComponent } from "./develop-proxies-create-r
     NgxDropzoneModule,
     TagInputModule,
     OrgChartModule,
+    MatStepperModule,
+    // MatStepperModule,
+    CdkStepperModule,
+    //MatFormFieldModule
+
   ],
 })
 export class AdminModule {}

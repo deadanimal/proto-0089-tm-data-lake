@@ -43,6 +43,47 @@
     <div class="col">
       <div class="card card-stats">
         <div class="card-body">
+
+          <!-- <button mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">
+            {{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}
+          </button> -->
+          <!-- <mat-horizontal-stepper #stepper>
+            <mat-step [stepControl]="firstFormGroup">
+              <form [formGroup]="firstFormGroup">
+                <ng-template matStepLabel>Fill out your name</ng-template>
+                <mat-form-field>
+                  <mat-label>Name</mat-label>
+                  <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
+                </mat-form-field>
+                <div>
+                  <button mat-button matStepperNext>Next</button>
+                </div>
+              </form>
+            </mat-step>
+            <mat-step [stepControl]="secondFormGroup" label="Fill out your address">
+              <form [formGroup]="secondFormGroup">
+                <mat-form-field>
+                  <mat-label>Address</mat-label>
+                  <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY"
+                         required>
+                </mat-form-field>
+                <div>
+                  <button mat-button matStepperPrevious>Back</button>
+                  <button mat-button matStepperNext>Next</button>
+                </div>
+              </form>
+            </mat-step>
+            <mat-step>
+              <ng-template matStepLabel>Done</ng-template>
+              <p>You are now done.</p>
+              <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button (click)="stepper.reset()">Reset</button>
+              </div>
+            </mat-step>
+          </mat-horizontal-stepper> -->
+
+
           <div class="row">
             <div class="col">
               <h5 class="card-title text-uppercase text-muted mb-0">
@@ -167,6 +208,86 @@
         <div style="width: 100%; height: 350px;" id="chartdsCreatetask1"></div>
       </div>
     </div>
+
+    <div class="col-xl-12">
+      <div class="card">
+          <div class="card-header bg-secondary">
+            <div class="row">
+              <div class="col-6">  
+                <h6 class="h2 text-dark d-inline-block mb-0"> Find File </h6>
+              </div> 
+              <div class="col-6 text-right">
+                <button class="btn btn-default" type="button" > New File </button>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+              <div class="row">
+                  <div class=" col-xl-3">
+                      <div class=" form-group">
+                          <label class=" form-control-label" for="example4cols2Input">
+                            File Name
+                          </label>
+              
+                          <input
+                            class=" form-control"
+                            id="example4cols2Input"
+                            placeholder="Type here..."
+                            type="text"
+                          />
+                      </div>
+                  </div>
+                  <div class=" col-xl-3">
+                      <div class=" form-group">
+                          <label class=" form-control-label" for="example4cols2Input">
+                            Owner
+                          </label>
+              
+                          <input
+                            class=" form-control"
+                            id="example4cols2Input"
+                            placeholder="Type here..."
+                            type="text"
+                          />
+                      </div>
+                  </div>
+                  <div class=" col-xl-3">
+                      <div class=" form-group">
+                          <label class=" form-control-label" for="example4cols2Input">
+                            Tags
+                          </label>
+
+                          <input
+                            class=" form-control"
+                            id="example4cols2Input"
+                            placeholder="Type here..."
+                            type="text"
+                          />
+                      </div>
+                  </div>
+                  <div class=" col-xl-3">
+                      <div class=" form-group">
+                          <label class=" form-control-label" for="example4cols2Input">
+                            Type
+                          </label>
+              
+                          <input
+                            class=" form-control"
+                            id="example4cols2Input"
+                            placeholder="Type here..."
+                            type="text"
+                          />
+                      </div>
+                  </div>
+            
+                  <div class="col-xl-12 text-right">
+                      <button class="btn btn-default" style="width: 10%;" type="button"> Find </button>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+
     <div class="col-md-12">
       <div class="card">
         <div class="card-header bg-secondary">
@@ -231,7 +352,7 @@
 
             <ngx-datatable-column>
               <ng-template ngx-datatable-header-template>
-                <span>Name</span>
+                <span> File Name </span>
               </ng-template>
               <ng-template let-row="row" ngx-datatable-cell-template
                 >{{ row.nama }}
@@ -271,6 +392,17 @@
               </ng-template>
               <ng-template let-row="row" ngx-datatable-cell-template
                 >{{ row.created_at | date: "dd/MM/yyyy" }}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Action">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                  <button class=" btn btn-icon btn-success btn-sm" type="button" title="Edit" (click)="openModal(edit)">
+                      <span class=" btn-inner--icon"> <i class=" fas fa-edit"> </i> </span>
+                  </button>
+                  <button class=" btn btn-icon btn-danger btn-sm" type="button" title="Delete" (click)="delete()">
+                    <span class=" btn-inner--icon"> <i class=" fas fa-trash"> </i> </span>
+                </button>
               </ng-template>
             </ngx-datatable-column>
 
@@ -404,6 +536,353 @@
       >
         Save
       </button>
+
+      <button
+        class="btn btn-outline-danger ml-auto"
+        data-dismiss="modal"
+        type="button"
+        (click)="closeModal()"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #edit>
+  <div class="modal-header bg-default">
+    <h6 class="modal-title text-white my-auto" id="modal-title-default">
+      Edit
+    </h6>
+
+    <button
+      aria-label="Close"
+      class="close"
+      data-dismiss="modal"
+      type="button"
+      (click)="closeModal()"
+    >
+      <span aria-hidden="true" class="text-white my-auto"> × </span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <!-- <button mat-raised-button (click)="isEditable = !isEditable">
+      {{!isEditable ? 'Enable edit mode' : 'Disable edit mode'}}
+    </button> -->
+    
+    <mat-horizontal-stepper #stepper>
+      <mat-step [stepControl]="firstFormGroup">
+        <form [formGroup]="firstFormGroup">
+          <ng-template matStepLabel> Overview </ng-template>
+          <div class="row">
+            <div class=" col-xl-6">
+                <div class=" form-group">
+                  <label class=" form-control-label" for="example4cols2Input">
+                    Document Name
+                  </label>
+      
+                  <input
+                    class=" form-control"
+                    id="example4cols2Input"
+                    placeholder="Type here..."
+                    type="text"
+                  />
+                </div>
+            </div>
+            <div class=" col-xl-6">
+                <div class=" form-group">
+                  <label class=" form-control-label" for="example4cols2Input">
+                    Owner
+                  </label>
+      
+                  <input
+                    class=" form-control"
+                    id="example4cols2Input"
+                    placeholder="Type here..."
+                    type="text"
+                  />
+                </div>
+            </div>
+            <div class=" col-xl-6">
+                <div class=" form-group">
+                  <label class=" form-control-label" for="example4cols2Input">
+                    Tags
+                  </label>
+
+                  <input
+                    class=" form-control"
+                    id="example4cols2Input"
+                    placeholder="Type here..."
+                    type="text"
+                  />
+                </div>
+            </div>
+            <div class=" col-xl-6">
+                <div class=" form-group">
+                  <label class=" form-control-label" for="example4cols2Input">
+                    Type
+                  </label>
+      
+                  <input
+                    class=" form-control"
+                    id="example4cols2Input"
+                    placeholder="Type here..."
+                    type="text"
+                  />
+                </div>
+            </div>
+            <div class=" col-xl-12">
+              <div class=" form-group">
+                  <label class=" form-control-label" for="example4cols2Input">
+                    Upload File
+                  </label>
+      
+                  <div class=" dropzone dropzone-single mb-3" id="dropzone-single">
+                    <div class=" fallback">
+                      <div class=" custom-file">
+                        <input
+                          class=" custom-file-input"
+                          id="projectCoverUploads"
+                          type="file"
+                        />
+      
+                        <label class=" custom-file-label" for="projectCoverUploads">
+                          Choose file
+                        </label>
+                      </div>
+                    </div>
+      
+                    <div class=" dz-preview dz-preview-single">
+                      <div class=" dz-preview-cover">
+                        <img
+                          alt="..."
+                          class=" dz-preview-img"
+                          data-dz-thumbnail=""
+                          src="..."
+                        />
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <div class=" col-xl-12">
+              <div class=" form-group">
+                  <label class=" form-control-label" for="example4cols2Input">
+                    Description
+                  </label>
+      
+                  <textarea
+                    class=" form-control"
+                    id="exampleFormControlTextarea3"
+                    rows="3"
+                  ></textarea>
+              </div>
+            </div>
+          </div>
+          <!-- <mat-form-field>
+            <div class="row">
+              <div class="col-xl-12">
+                <mat-label> Document Name </mat-label>
+                <input matInput placeholder="Type here...">
+              </div>
+              <div class="col-xl-12">
+                <mat-label> Owner </mat-label>
+                <input matInput placeholder="Type here..." >
+              </div>
+              <div class="col-xl-12">
+                <mat-label> Tags </mat-label>
+                <input matInput placeholder="Type here..." >
+              </div>
+              <div class="col-xl-12">
+                <mat-label> Type </mat-label>
+                <input matInput placeholder="Type here..." >
+              </div>
+              <div class="col-xl-12">
+                <mat-label> Description </mat-label>
+                <textarea matInput placeholder="Type here..."></textarea>
+              </div>
+              <div class="col-xl-12">
+                <mat-label> Upload File </mat-label>
+                <input matInput placeholder="Type here..." >
+              </div>
+            </div>
+          </mat-form-field> -->
+          <div>
+            <button mat-button matStepperNext> Submit </button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="secondFormGroup" label="Metadata">
+        <form [formGroup]="secondFormGroup">
+          <div class="row">
+            <div class=" col-xl-6">
+                <div class=" form-group">
+                  <label class=" form-control-label" for="example4cols2Input">
+                    Date Created
+                  </label>
+      
+                  <input
+                    class=" form-control"
+                    id="example-date-input"
+                    type="date"
+                    value="2018-11-23"
+                  />
+                </div>
+            </div>
+            <div class=" col-xl-6">
+                <div class=" form-group">
+                  <label class=" form-control-label" for="example4cols2Input">
+                    Last Modified
+                  </label>
+      
+                  <input
+                    class=" form-control"
+                    id="example-date-input"
+                    type="date"
+                    value="2018-11-23"
+                  />
+                </div>
+            </div>
+            <div class=" col-xl-6">
+                <div class=" form-group">
+                  <label class=" form-control-label" for="example4cols2Input">
+                    Last Published
+                  </label>
+
+                  <input
+                    class=" form-control"
+                    id="example-date-input"
+                    type="date"
+                    value="2018-11-23"
+                  />
+                </div>
+            </div>
+            <div class=" col-xl-6">
+                <div class=" form-group">
+                  <label class=" form-control-label" for="example4cols2Input">
+                    Indexable
+                  </label>
+      
+                  <select class="form-control custom-select">
+                    <option hidden selected>Please pick</option>
+                    <option> Yes </option>
+                    <option> No </option>
+                  </select>
+                </div>
+            </div>
+            <div class=" col-xl-12">
+              <div class=" form-group">
+                  <label class=" form-control-label" for="example4cols2Input">
+                    Maintainable Link
+                  </label>
+      
+                  <input
+                    class=" form-control"
+                    id="example-url-input"
+                    type="url"
+                    placeholder="https://www.try_example1.com"
+                  />
+              </div>
+            </div>
+          </div>
+          <!-- <mat-form-field>
+            <mat-label>Address</mat-label>
+            <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY"
+                   required>
+          </mat-form-field> -->
+          <div>
+            <button mat-button matStepperPrevious> Back </button>
+            <button mat-button matStepperNext> Submit </button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="thirdFormGroup">
+        <form [formGroup]="thirdFormGroup">
+          <ng-template matStepLabel> Signature </ng-template>
+          <div class="row">
+            <div class=" col-xl-6">
+                <div class=" form-group">
+                  <label class=" form-control-label" for="example4cols2Input">
+                    Signed By
+                  </label>
+      
+                  <input
+                    class=" form-control"
+                    id="example4cols2Input"
+                    placeholder="Type here..."
+                    type="text"
+                  />
+                </div>
+            </div>
+            <div class=" col-xl-6">
+                <div class=" form-group">
+                  <label class=" form-control-label" for="example4cols2Input">
+                    Issued By
+                  </label>
+      
+                  <input
+                    class=" form-control"
+                    id="example4cols2Input"
+                    placeholder="Type here..."
+                    type="text"
+                  />
+                </div>
+            </div>
+            <div class=" col-xl-12">
+              <div class=" form-group">
+                  <label class=" form-control-label" for="example4cols2Input">
+                    Signing Image
+                  </label>
+      
+                  <div class=" dropzone dropzone-single mb-3" id="dropzone-single">
+                    <div class=" fallback">
+                      <div class=" custom-file">
+                        <input
+                          class=" custom-file-input"
+                          id="projectCoverUploads"
+                          type="file"
+                        />
+      
+                        <label class=" custom-file-label" for="projectCoverUploads">
+                          Choose file
+                        </label>
+                      </div>
+                    </div>
+      
+                    <div class=" dz-preview dz-preview-single">
+                      <div class=" dz-preview-cover">
+                        <img
+                          alt="..."
+                          class=" dz-preview-img"
+                          data-dz-thumbnail=""
+                          src="..."
+                        />
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </form>        
+        <!-- <p>You are now done.</p> -->
+        <div>
+          <button mat-button matStepperPrevious> Back </button>
+          <button mat-button (click)="submit()"> Submit </button>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </div>
+
+  <div class="modal-footer">
+    <div class="text-center">
+      <!-- <button
+        class="btn btn-default"
+        type="submit"
+        (click)="successAlert('save data')"
+      >
+        Save
+      </button> -->
 
       <button
         class="btn btn-outline-danger ml-auto"

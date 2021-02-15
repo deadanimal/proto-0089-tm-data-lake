@@ -12,6 +12,7 @@ import * as moment from "moment";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import am4themes_kelly from "@amcharts/amcharts4/themes/kelly";
 am4core.useTheme(am4themes_animated);
 
 //
@@ -30,6 +31,8 @@ import { AuthService } from "src/app/shared/services/auth/auth.service";
 import { NotifyService } from "src/app/shared/handler/notify/notify.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { OrgData } from "angular-org-chart/src/app/modules/org-chart/orgData";
+import Dropzone from "dropzone";
+Dropzone.autoDiscover = false;
 
 export enum SelectionType {
   single = "single",
@@ -45,6 +48,13 @@ export enum SelectionType {
   styleUrls: ["./develop-specs.component.scss"],
 })
 export class DevelopSpecsComponent implements OnInit, OnDestroy {
+  
+  //Stepper
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
+  thirdFormGroup: FormGroup;
+  isEditable = false;
+  
   // Table
   tableEntries: number = 5;
   tableSelected: any[] = [];
@@ -126,22 +136,22 @@ export class DevelopSpecsComponent implements OnInit, OnDestroy {
   listAction: any;
   listTask: any = [
     {
-      nama: "Employee",
-      owner: "Fadhli",
+      nama: "try1.docx",
+      owner: "Syafik",
       tags: "Sales",
       type: "Data Asset",
       created_at: "2019-07-27T01:07:14Z",
     },
     {
-      nama: "Employee",
-      owner: "Faez",
+      nama: "try2.ppt",
+      owner: "Fizi",
       tags: "IoT",
       type: "Data Asset",
       created_at: "2019-07-27T01:07:14Z",
     },
     {
-      nama: "Employee",
-      owner: "Amin",
+      nama: "try3.png",
+      owner: "Husein",
       tags: "Confidential",
       type: "Data Asset",
       created_at: "2019-07-27T01:07:14Z",
@@ -180,7 +190,8 @@ export class DevelopSpecsComponent implements OnInit, OnDestroy {
     private ActionData: ActionsService,
     private loadingBar: LoadingBarService,
     private router: Router,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private _formBuilder: FormBuilder
   ) {}
 
   ngOnInit() {
@@ -210,6 +221,40 @@ export class DevelopSpecsComponent implements OnInit, OnDestroy {
       name: new FormControl("", Validators.compose([Validators.required])),
       detail: new FormControl("", Validators.compose([Validators.required])),
     });
+
+    this.firstFormGroup = this._formBuilder.group({
+      firstCtrl: ['', Validators.required]
+    });
+    this.secondFormGroup = this._formBuilder.group({
+      secondCtrl: ['', Validators.required]
+    });
+    this.thirdFormGroup = this._formBuilder.group({
+      thirdCtrl: ['', Validators.required]
+    });
+
+    let currentSingleFile = undefined;
+    // single dropzone file - accepts only images
+    new Dropzone(document.getElementById("dropzone-single"), {
+      url: "/",
+      thumbnailWidth: null,
+      thumbnailHeight: null,
+      previewsContainer: document.getElementsByClassName(
+        "dz-preview-single"
+      )[0],
+      previewTemplate: document.getElementsByClassName("dz-preview-single")[0]
+        .innerHTML,
+      maxFiles: 1,
+      acceptedFiles: "image/*",
+      init: function() {
+        this.on("addedfile", function(file) {
+          if (currentSingleFile) {
+            this.removeFile(currentSingleFile);
+          }
+          currentSingleFile = file;
+        });
+      }
+    });
+    document.getElementsByClassName("dz-preview-single")[0].innerHTML = "";
   }
 
   addNewAction() {
@@ -433,6 +478,66 @@ export class DevelopSpecsComponent implements OnInit, OnDestroy {
       });
   }
 
+  delete() {
+    swal.fire({
+      title: "Confirmation",
+      text: "Are you sure to delete this?",
+      type: "info",
+      buttonsStyling: false,
+      confirmButtonClass: "btn btn-info",
+      confirmButtonText: "Confirm",
+      showCancelButton: true,
+      cancelButtonClass: "btn btn-danger",
+      cancelButtonText: "Cancel"
+    }).then((result) => {
+      if (result.value) {
+        this.doneDelete()
+      }
+    })
+  }
+
+  doneDelete() {
+    swal.fire({
+      title: "Success",
+      text: "The data have been deleted!",
+      type: "success",
+      buttonsStyling: false,
+      confirmButtonClass: "btn btn-success",
+      confirmButtonText: "Close"
+    })
+    this.modal.hide()
+  }
+
+  submit() {
+    swal.fire({
+      title: "Confirmation",
+      text: "Are you sure to save this?",
+      type: "info",
+      buttonsStyling: false,
+      confirmButtonClass: "btn btn-info",
+      confirmButtonText: "Confirm",
+      showCancelButton: true,
+      cancelButtonClass: "btn btn-danger",
+      cancelButtonText: "Cancel"
+    }).then((result) => {
+      if (result.value) {
+        this.doneSubmit()
+      }
+    })
+  }
+
+  doneSubmit() {
+    swal.fire({
+      title: "Success",
+      text: "The data have been saved!",
+      type: "success",
+      buttonsStyling: false,
+      confirmButtonClass: "btn btn-success",
+      confirmButtonText: "Close"
+    })
+    this.modal.hide()
+  }
+
   getChart() {
     // let chart = am4core.create("chartdivAction", am4charts.XYChart);
     let chart = am4core.create("chartdsCreatetask", am4charts.XYChart3D);
@@ -532,98 +637,50 @@ export class DevelopSpecsComponent implements OnInit, OnDestroy {
   }
 
   getChart1() {
-    let chart = am4core.create("chartdsCreatetask1", am4charts.XYChart);
+    /* Chart code */
+    // Themes begin
+    am4core.useTheme(am4themes_kelly);
+    am4core.useTheme(am4themes_animated);
+    // Themes end
+
+    // Create chart instance
+    let chart = am4core.create("chartdsCreatetask1", am4charts.PieChart);
 
     // Add data
-    chart.data = generateChartData();
+    chart.data = [ {
+      "country": "docx",
+      "litres": 501.9
+    }, {
+      "country": "xlsx",
+      "litres": 301.9
+    }, {
+      "country": "ppt",
+      "litres": 201.1
+    }, {
+      "country": "jpeg",
+      "litres": 165.8
+    }, {
+      "country": "png",
+      "litres": 139.9
+    }, {
+      "country": "pdf",
+      "litres": 128.3
+    }, {
+      "country": "mp3",
+      "litres": 99
+    }, ];
 
-    // Create axes
-    let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+    // Add and configure Series
+    let pieSeries = chart.series.push(new am4charts.PieSeries());
+    pieSeries.dataFields.value = "litres";
+    pieSeries.dataFields.category = "country";
+    pieSeries.slices.template.stroke = am4core.color("#fff");
+    pieSeries.slices.template.strokeWidth = 2;
+    pieSeries.slices.template.strokeOpacity = 1;
 
-    let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-
-    // Create series
-    let series = chart.series.push(new am4charts.LineSeries());
-    series.dataFields.valueY = "visits";
-    series.dataFields.dateX = "date";
-    series.strokeWidth = 1;
-    series.minBulletDistance = 10;
-    series.tooltipText = "{valueY}";
-    series.fillOpacity = 0.1;
-    series.tooltip.pointerOrientation = "vertical";
-    series.tooltip.background.cornerRadius = 20;
-    series.tooltip.background.fillOpacity = 0.5;
-    series.tooltip.label.padding(12, 12, 12, 12);
-
-    let seriesRange = dateAxis.createSeriesRange(series);
-    seriesRange.contents.strokeDasharray = "2,3";
-    seriesRange.contents.stroke = chart.colors.getIndex(8);
-    seriesRange.contents.strokeWidth = 1;
-
-    let pattern = new am4core.LinePattern();
-    pattern.rotation = -45;
-    pattern.stroke = seriesRange.contents.stroke;
-    pattern.width = 1000;
-    pattern.height = 1000;
-    pattern.gap = 6;
-    seriesRange.contents.fill = pattern;
-    seriesRange.contents.fillOpacity = 0.5;
-
-    // Add scrollbar
-    chart.scrollbarX = new am4core.Scrollbar();
-
-    function generateChartData() {
-      let chartData = [];
-      let firstDate = new Date();
-      firstDate.setDate(firstDate.getDate() - 200);
-      let visits = 1200;
-      for (var i = 0; i < 200; i++) {
-        // we create date objects here. In your data, you can have date strings
-        // and then set format of your dates using chart.dataDateFormat property,
-        // however when possible, use date objects, as this will speed up chart rendering.
-        let newDate = new Date(firstDate);
-        newDate.setDate(newDate.getDate() + i);
-
-        visits += Math.round(
-          (Math.random() < 0.5 ? 1 : -1) * Math.random() * 10
-        );
-
-        chartData.push({
-          date: newDate,
-          visits: visits,
-        });
-      }
-      return chartData;
-    }
-
-    // add range
-    let range = dateAxis.axisRanges.push(new am4charts.DateAxisDataItem());
-    range.grid.stroke = chart.colors.getIndex(0);
-    range.grid.strokeOpacity = 1;
-    range.bullet = new am4core.ResizeButton();
-    // range.bullet.background.fill = chart.colors.getIndex(0);
-    // range.bullet.background.states.copyFrom(
-    //   chart.zoomOutButton.background.states
-    // );
-    range.bullet.minX = 0;
-    range.bullet.adapter.add("minY", function (minY, target) {
-      target.maxY = chart.plotContainer.maxHeight;
-      target.maxX = chart.plotContainer.maxWidth;
-      return chart.plotContainer.maxHeight;
-    });
-
-    range.bullet.events.on("dragged", function () {
-      range.value = dateAxis.xToValue(range.bullet.pixelX);
-      seriesRange.value = range.value;
-    });
-
-    let firstTime = chart.data[0].date.getTime();
-    let lastTime = chart.data[chart.data.length - 1].date.getTime();
-    let date = new Date(firstTime + (lastTime - firstTime) / 2);
-
-    range.date = date;
-
-    seriesRange.date = date;
-    seriesRange.endDate = chart.data[chart.data.length - 1].date;
+    // This creates initial animation
+    pieSeries.hiddenState.properties.opacity = 1;
+    pieSeries.hiddenState.properties.endAngle = -90;
+    pieSeries.hiddenState.properties.startAngle = -90;
   }
 }

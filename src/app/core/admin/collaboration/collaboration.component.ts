@@ -11,8 +11,12 @@ import { ComplaintsService } from "src/app/shared/services/complaints/complaints
 import * as moment from "moment";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
+import am4themes_kelly from "@amcharts/amcharts4/themes/kelly";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 am4core.useTheme(am4themes_animated);
+import Quill from "quill";
+//import { QuillViewHTMLComponent } from 'ngx-quill';
+import 'quill-emoji/dist/quill-emoji.js';
 
 //
 import { HttpClient } from "@angular/common/http";
@@ -56,6 +60,7 @@ export class CollaborationComponent implements OnInit, OnDestroy {
 
   // Chart
   private chart: any;
+  private chart1: any;
   chartJan: number = 0;
   chartFeb: number = 0;
   chartMar: number = 0;
@@ -178,6 +183,51 @@ export class CollaborationComponent implements OnInit, OnDestroy {
         Validators.compose([Validators.required])
       ),
     });
+
+    const toolbarOptions = {
+      container: [
+        ['bold', 'italic', 'underline', 'strike'],
+        ['emoji'],   
+      ],
+      handlers: {'emoji': function() {}}
+    }
+    const quill = new Quill("#quill", {
+      // ...
+      modules: {
+        // ...
+        toolbar: toolbarOptions,
+        "emoji-toolbar": true,
+        "emoji-textarea": true,
+        "emoji-shortname": true,
+      },
+      placeholder: 'Compose an epic...',
+        theme: 'snow',
+    });
+
+    // var quill = new Quill("#quill", {
+    //   modules: {
+    //     toolbar: [
+    //       ["bold", "italic"],
+    //       ["link", "blockquote", "code", "image"],
+    //       [
+    //         {
+    //           list: "ordered"
+    //         },
+    //         {
+    //           list: "bullet"
+    //         }
+    //       ]
+
+    //     ],
+    //     toolbar: toolbarOptions,
+    //     "emoji-toolbar": true,
+    //     "emoji-textarea": true,
+    //     "emoji-shortname": true,
+    //   },
+    //   placeholder: "Quill WYSIWYG",
+    //   theme: "snow"
+    // });
+    
   }
 
   addNewComplaint() {
@@ -314,6 +364,10 @@ export class CollaborationComponent implements OnInit, OnDestroy {
         console.log("Chart disposed");
         this.chart.dispose();
       }
+      if (this.chart1) {
+        console.log("Chart disposed");
+        this.chart1.dispose();
+      }
       // if (this.chart1) {
       //   console.log("Chart disposed");
       //   this.chart1.dispose();
@@ -323,7 +377,8 @@ export class CollaborationComponent implements OnInit, OnDestroy {
 
   getCharts() {
     this.zone.runOutsideAngular(() => {
-      this.getChart();
+      // this.getChart();
+      this.getChartBar1();
     });
   }
 
@@ -495,5 +550,102 @@ export class CollaborationComponent implements OnInit, OnDestroy {
 
     // Add legend
     chart.legend = new am4charts.Legend();
+  }
+
+  getChartBar1 () {
+    /* Chart code */
+    // Themes begin
+    am4core.useTheme(am4themes_kelly);
+    am4core.useTheme(am4themes_animated);
+    // Themes end
+
+    let chart = am4core.create("chartcollaborationpbar1", am4charts.XYChart);
+
+    chart.data = [{
+    "country": "Monday",
+    "visits": 2025
+    }, {
+    "country": "Tuesday",
+    "visits": 1882
+    }, {
+    "country": "Wednesday",
+    "visits": 1809
+    }, {
+    "country": "Thursday",
+    "visits": 1322
+    }, {
+    "country": "Friday",
+    "visits": 1122 }
+    // }, {
+    // "country": "France",
+    // "visits": 1114
+    // }, {
+    // "country": "India",
+    // "visits": 984
+    // }, {
+    // "country": "Spain",
+    // "visits": 711
+    // }, {
+    // "country": "Netherlands",
+    // "visits": 665
+    // }, {
+    // "country": "Russia",
+    // "visits": 580
+    // }, {
+    // "country": "South Korea",
+    // "visits": 443
+    // }, {
+    // "country": "Canada",
+    // "visits": 441
+    // }
+    ];
+
+    chart.padding(40, 40, 40, 40);
+
+    let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.renderer.grid.template.location = 0;
+    categoryAxis.dataFields.category = "country";
+    categoryAxis.renderer.minGridDistance = 60;
+    categoryAxis.renderer.inversed = true;
+    categoryAxis.renderer.grid.template.disabled = true;
+
+    let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    valueAxis.min = 0;
+    valueAxis.extraMax = 0.1;
+    //valueAxis.rangeChangeEasing = am4core.ease.linear;
+    //valueAxis.rangeChangeDuration = 1500;
+
+    let series = chart.series.push(new am4charts.ColumnSeries());
+    series.dataFields.categoryX = "country";
+    series.dataFields.valueY = "visits";
+    series.tooltipText = "{valueY.value}"
+    series.columns.template.strokeOpacity = 0;
+    series.columns.template.column.cornerRadiusTopRight = 10;
+    series.columns.template.column.cornerRadiusTopLeft = 10;
+    //series.interpolationDuration = 1500;
+    //series.interpolationEasing = am4core.ease.linear;
+    let labelBullet = series.bullets.push(new am4charts.LabelBullet());
+    labelBullet.label.verticalCenter = "bottom";
+    labelBullet.label.dy = -10;
+    labelBullet.label.text = "{values.valueY.workingValue.formatNumber('#.')}";
+
+    chart.zoomOutButton.disabled = true;
+
+    // as by default columns of the same series are of the same color, we add adapter which takes colors from chart.colors color set
+    series.columns.template.adapter.add("fill", function (fill, target) {
+    return chart.colors.getIndex(target.dataItem.index);
+    });
+
+    setInterval(function () {
+    am4core.array.each(chart.data, function (item) {
+      item.visits += Math.round(Math.random() * 200 - 100);
+      item.visits = Math.abs(item.visits);
+    })
+    chart.invalidateRawData();
+    }, 2000)
+
+    categoryAxis.sortBySeries = series;
+
+    this.chart1 = chart
   }
 }

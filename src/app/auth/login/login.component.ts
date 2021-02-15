@@ -104,7 +104,7 @@ export class LoginComponent implements OnInit {
 
   successMessage() {
     let title = "Log In";
-    let message = "Logging in right now";
+    let message = "Login in right now";
     this.notifyService.openToastr(title, message);
   }
 

@@ -58,6 +58,7 @@ import { ManagementEnvironmentTargetComponent } from "./management-environment-t
 import { ManagementEnvironmentTlsComponent } from "./management-environment-tls/management-environment-tls.component";
 import { ManagementRolesComponent } from "./management-roles/management-roles.component";
 import { ManagementVirtualComponent } from "./management-virtual/management-virtual.component";
+import { DataFlowComponent } from './data-flow/data-flow.component';
 
 export const AdminRoutes: Routes = [
   {
@@ -244,6 +245,10 @@ export const AdminRoutes: Routes = [
             component: ManagementVirtualComponent,
           },
         ],
+      },
+      {
+        path: "collaboration",
+        component: CollaborationComponent,
       },
       {
         path: "report",
