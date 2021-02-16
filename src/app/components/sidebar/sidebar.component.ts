@@ -14,7 +14,7 @@ var misc: any = {
   styleUrls: ["./sidebar.component.scss"],
 })
 export class SidebarComponent implements OnInit {
-  imgLogo = "assets/img/logo/tm-logo.png";
+  imgLogo = "assets/img/logo/kwsp.png";
 
   public href: string = "";
 

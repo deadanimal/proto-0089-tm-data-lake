@@ -17,7 +17,7 @@ import { NotifyService } from "src/app/shared/handler/notify/notify.service";
 })
 export class LoginComponent implements OnInit {
   // Image
-  imgLogo = "assets/img/logo/tm-logo.png";
+  imgLogo = "assets/img/logo/kwsp.png";
   imgBg = "assets/img/default/bg-img-it.jpg";
 
   // Form

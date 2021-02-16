@@ -134,6 +134,19 @@
                                 <span *ngIf="row.is_active == 'Inactive'" class="badge badge-pill badge-warning">Inactive</span>
                             </ng-template>
                         </ngx-datatable-column>
+                        <ngx-datatable-column name="Action">
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                <button class=" btn btn-icon btn-default btn-sm" type="button" title="View/Modify" (click)="openModal(viewData)">
+                                    <span class=" btn-inner--icon"> <i class=" far fa-eye"> </i> </span>
+                                </button>
+                                <button class=" btn btn-icon btn-danger btn-sm" type="button" title="Delete" (click)="delete()">
+                                    <span class=" btn-inner--icon"> <i class=" fas fa-trash"> </i> </span>
+                                </button>
+                                <!-- <button class=" btn btn-icon btn-default btn-sm" type="button" title="Print">
+                                    <span class=" btn-inner--icon"> <i class=" fas fa-print"> </i> </span>
+                                </button> -->
+                            </ng-template>
+                        </ngx-datatable-column>
                     </ngx-datatable>
                 </div>
             </div>
@@ -208,6 +221,204 @@
             (click)="closeModal()"
         >
             Close
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #viewData>
+    <div class="modal-header bg-default">
+        <h6 class="modal-title text-white my-auto" id="modal-title-default">
+            View/Modify
+        </h6>
+
+        <button
+            aria-label="Close"
+            class="close"
+            data-dismiss="modal"
+            type="button"
+            (click)="closeModal()"
+        >
+            <span aria-hidden="true" class="text-white my-auto"> × </span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+		<div class="card">
+			<div class="card-body">
+				<div class="row">
+                    <div class=" col-xl-12">
+                        <div class=" form-group">
+                            <label class=" form-control-label" for="example4cols2Input">
+                                User ID
+                            </label>
+                
+                            <input
+                              class=" form-control"
+                              id="example4cols2Input"
+                              value="43060"
+                              type="text"
+                            />
+                        </div>
+                    </div>
+                    <div class=" col-xl-12">
+                        <div class=" form-group">
+                            <label class=" form-control-label" for="example4cols2Input">
+                                Name
+                            </label>
+                
+                            <input
+                              class=" form-control"
+                              id="example4cols2Input"
+                              value="Malanie Rivilis"
+                              type="text"
+                            />
+                        </div>
+                    </div>
+                    <div class=" col-xl-12">
+                        <div class=" form-group">
+                            <label class=" form-control-label" for="example4cols2Input">
+                                Email
+                            </label>
+
+                            <input
+                              class=" form-control"
+                              id="example4cols2Input"
+                              value="mrivilis1@ycombinator.com"
+                              type="text"
+                            />
+                        </div>
+                    </div>
+                    <div class=" col-xl-12">
+                        <div class=" form-group">
+                            <label class=" form-control-label" for="example4cols2Input">
+                              Joined At
+                            </label>
+                
+                            <input
+                              class=" form-control"
+                              id="example4cols2Input"
+                              value="2019-10-21T02:02:15Z"
+                              type="text"
+                            />
+                        </div>
+                    </div>
+                    <div class=" col-xl-12">
+                        <div class=" form-group">
+                            <label class=" form-control-label" for="example4cols2Input">
+                              User Type
+                            </label>
+                
+                            <input
+                              class=" form-control"
+                              id="example4cols2Input"
+                              value="Admin"
+                              type="text"
+                            />
+                        </div>
+                    </div>
+                    <div class=" col-xl-12">
+                        <div class=" form-group">
+                            <label class=" form-control-label" for="example4cols2Input">
+                              Status: 
+                            </label>
+                
+                            <span class="badge badge-pill badge-success"> Active </span>
+                        </div>
+                    </div>
+                    <div class=" col-xl-12">
+                        <div class=" form-group">
+                            <label class=" form-control-label" for="example4cols2Input">
+                              Roles
+                            </label>
+                
+                            <div class=" custom-control custom-checkbox mb-0">
+                                <input
+                                    checked="checked"
+                                    
+                                    class=" custom-control-input"
+                                    id="customCheck2"
+                                    type="checkbox"
+                                />
+            
+                                <label class=" custom-control-label" for="customCheck2">
+                                    Add Data
+                                </label>
+                            </div>
+                            <div class=" custom-control custom-checkbox mb-0">
+                                <input
+                                
+                                    checked="checked"
+                                    class=" custom-control-input"
+                                    id="customCheck2"
+                                    type="checkbox"
+                                />
+            
+                                <label class=" custom-control-label" for="customCheck2">
+                                    Update Data
+                                </label>
+                            </div>
+                            <div class=" custom-control custom-checkbox mb-0">
+                                <input
+                                    
+                                    checked="checked"
+                                    class=" custom-control-input"
+                                    id="customCheck2"
+                                    type="checkbox"
+                                />
+            
+                                <label class=" custom-control-label" for="customCheck2">
+                                    Upload Data
+                                </label>
+                            </div>
+                            <div class=" custom-control custom-checkbox mb-0">
+                                <input
+                                    
+                                    checked="checked"
+                                    class=" custom-control-input"
+                                    id="customCheck2"
+                                    type="checkbox"
+                                />
+            
+                                <label class=" custom-control-label" for="customCheck2">
+                                    Export Data
+                                </label>
+                            </div>
+                            <div class=" custom-control custom-checkbox mb-0">
+                                <input
+                                    
+                                    checked="checked"
+                                    class=" custom-control-input"
+                                    id="customCheck2"
+                                    type="checkbox"
+                                />
+            
+                                <label class=" custom-control-label" for="customCheck2">
+                                    Portal
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			</div>
+		</div>
+    </div>
+
+    <div class="modal-footer">
+        <button 
+            class="btn btn-success"
+            type="button"
+            (click)="change()"
+        >
+            Save
+        </button>
+
+        <button
+            class="btn btn-outline-danger ml-auto"
+            data-dismiss="modal"
+            type="button"
+            (click)="closeModal()"
+        >
+		    Close
         </button>
     </div>
 </ng-template>

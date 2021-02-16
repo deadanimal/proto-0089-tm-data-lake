@@ -302,6 +302,74 @@ export class ManagementUserComponent implements OnInit, OnDestroy {
     })
   }
 
+  change() {
+    swal.fire({
+      title: "Confirmation",
+      text: "Are you sure to make a changes?",
+      type: "info",
+      buttonsStyling: false,
+      confirmButtonClass: "btn btn-info",
+      confirmButtonText: "Confirm",
+      showCancelButton: true,
+      cancelButtonClass: "btn btn-danger",
+      cancelButtonText: "Cancel"
+    }).then((result) => {
+      if (result.value) {
+        this.confirmChange()
+      }
+    })
+  }
+
+  confirmChange() {
+    swal.fire({
+      title: "Success",
+      text: "The data has been saved!",
+      type: "success",
+      buttonsStyling: false,
+      confirmButtonClass: "btn btn-success",
+      confirmButtonText: "Close"
+    }).then((result) => {
+      if (result.value) {
+        this.modal.hide()
+        this.registerForm.reset()
+      }
+    })
+  }
+
+  delete() {
+    swal.fire({
+      title: "Confirmation",
+      text: "Are you sure to delete this user?",
+      type: "info",
+      buttonsStyling: false,
+      confirmButtonClass: "btn btn-info",
+      confirmButtonText: "Confirm",
+      showCancelButton: true,
+      cancelButtonClass: "btn btn-danger",
+      cancelButtonText: "Cancel"
+    }).then((result) => {
+      if (result.value) {
+        this.confirmDelete()
+      }
+    })
+  }
+
+  confirmDelete() {
+    swal.fire({
+      title: "Success",
+      text: "The user has been deleted!",
+      type: "success",
+      buttonsStyling: false,
+      confirmButtonClass: "btn btn-success",
+      confirmButtonText: "Close"
+    }).then((result) => {
+      if (result.value) {
+        this.modal.hide()
+        this.registerForm.reset()
+      }
+    })
+  }
+
   entriesChange($event) {
     this.tableEntries = $event.target.value;
   }
@@ -326,5 +394,6 @@ export class ManagementUserComponent implements OnInit, OnDestroy {
   onActivate(event) {
     this.tableActiveRow = event.row;
   }
+
 
 }

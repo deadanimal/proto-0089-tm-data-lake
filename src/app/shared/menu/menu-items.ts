@@ -134,7 +134,7 @@ export const ROUTES: RouteInfo[] = [
         type: "link",
       },
       { path: "users", title: "Users", type: "link" },
-      { path: "roles", title: "Roles", type: "link" },
+      // { path: "roles", title: "Roles", type: "link" },
     ],
   },
   // {
